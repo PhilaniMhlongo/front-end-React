@@ -1,3 +1,13 @@
+# React 
+to start a create a React application you have to say
+```shell
+npx create-react-app my-app
+
+```
+to start the server
+```shell
+npm start
+```
 
 
 ## Introduction to code Sand box
@@ -196,4 +206,8 @@ ReactDOM.render(<h1 style={{color: "red"}}> Hello World<h1>,document.getElementB
 // Apply the "heading" style in the css
 // Dynmincally change the color of h1 using inline can style
 // Morining=red, Afternoon=green , Night=blue
+
+```javascript
+
+```
 
