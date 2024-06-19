@@ -208,6 +208,40 @@ ReactDOM.render(<h1 style={{color: "red"}}> Hello World<h1>,document.getElementB
 // Morining=red, Afternoon=green , Night=blue
 
 ```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+
+// javastript object are key-value pair {key: value}
+const time=new Date().getHours()
+
+let greeting=""; //We created a variable
+const customStyle={
+    color: ""
+}
+
+if(time<12)
+{
+    greeting="Good Morning";
+    customStyle.color="red"
+}else {
+    if(time<18)
+    {
+        greeting="Good AfterNoon"
+        customStyle.color="green"
+    }
+    else{
+        greeting="Good Night"
+        customStyle.color="blue"
+    }
+}
+
+
+ReactDOM.render(
+    <div>
+        <h1 className="heading" style={customStyle}>{greeting}</h1>
+    </div>
+    ,document.getElementById("root" ));
 
 ```
 
+## React Component
