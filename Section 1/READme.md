@@ -245,3 +245,48 @@ ReactDOM.render(
 ```
 
 ## React Component
+The aim is to separate code into compo0nents
+
+### Import, Export and Modules ES6
+we have index.js
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+// we can now use pi
+import pi,{doublePi,triplePi} from "./math.js"
+
+ReactDOM.render(
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>,
+    document.getElementById("root")
+)
+```
+
+Let create a file call 
+math.js
+```javascript
+const pi=3.1415962
+// we can export this file if we want to use it elsewhere
+export default pi
+```
+How we will export  multiple things
+```javascript
+const pi=3.1415962
+// we can export this file if we want to use it elsewhere
+function doublePi(){
+    return pi*2
+}
+
+function triplePi(){
+    return pi*3
+}
+
+// there can be only one export per file
+export default pi;
+
+export {doublePi,triplePi}
+
+```
