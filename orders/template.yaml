@@ -5,7 +5,13 @@ Description: >
 
 Globals:
   Api:
-    TracingEnabled: true  # Enables AWS X-Ray tracing for the API Gateway.
+    TracingEnabled: true
+  Function:
+    Environment:
+      Variables:
+        POWERTOOLS_SERVICE_NAME: orders
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:68
 
 Parameters:
   UserPool:
@@ -24,6 +30,20 @@ Resources:
         RetentionPolicy: Delete
     Metadata:
       BuildMethod: python3.9
+
+  IdempotencyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -   AttributeName: id
+            AttributeType: S
+      KeySchema:
+        -   AttributeName: id
+            KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expiration
+        Enabled: true
+      BillingMode: PAY_PER_REQUEST
 
   OrdersTable:  # Creates the DynamoDB table with userId and orderId as the keys
     Type: AWS::DynamoDB::Table
@@ -49,6 +69,7 @@ Resources:
         Authorizers:
           Module3CognitoAuthorizer:  # Sets Cognito user pool as default authorizer for API requests
             UserPoolArn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${UserPool}"
+  
   AddOrderFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -59,9 +80,12 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref OrdersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref IdempotencyTable
       Environment:
         Variables:
           TABLE_NAME: !Ref OrdersTable
+          IDEMPOTENCY_TABLE_NAME: !Ref IdempotencyTable       
       Events:
         ApiEvent:
           Type: Api
