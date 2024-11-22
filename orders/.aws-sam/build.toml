@@ -9,6 +9,24 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["AddOrderFunction"]
 
+[function_build_definitions.e5d8348d-6954-4a32-bef6-36e0fe69beec]
+codeuri = "/home/wtc1/Videos/Severless/m3/ws-serverless-patterns/orders/src/api/order/get"
+runtime = "python3.9"
+architecture = "x86_64"
+handler = "get_order.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["GetOrderFunction"]
+
+[function_build_definitions.7e9e4a3b-8294-42ca-86ae-1c83f001ef88]
+codeuri = "/home/wtc1/Videos/Severless/m3/ws-serverless-patterns/orders/src/api/order/list"
+runtime = "python3.9"
+architecture = "x86_64"
+handler = "list_orders.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["ListOrdersFunction"]
+
 [layer_build_definitions.8ecc5086-ba2e-4623-852e-8484510205f6]
 layer_name = "PyUtils"
 codeuri = "/home/wtc1/Videos/Severless/m3/ws-serverless-patterns/orders/src/layers"

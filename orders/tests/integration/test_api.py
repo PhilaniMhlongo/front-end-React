@@ -63,3 +63,29 @@ def test_add_new_order(global_config, orders_endpoint, user_token):
   global_config['orderId'] = order_id
   global_config['orderTime'] = order_time
   assert order_info['status'] == "PLACED"
+  
+
+def test_get_order(global_config, orders_endpoint, user_token):
+  response = requests.get(orders_endpoint + "/" + global_config['orderId'],
+      headers={'Authorization': user_token, 'Content-Type': 'application/json'}
+      )
+
+  logger.debug(response.text)
+  order_info = json.loads(response.text)
+  assert order_info['orderId'] == global_config['orderId']
+  assert order_info['status'] == "PLACED"
+  assert order_info['totalAmount'] == 19.97
+  assert order_info['restaurantId'] == 1
+  assert len(order_info['orderItems']) == 2
+  
+  
+def test_list_orders(global_config, orders_endpoint, user_token):
+  response = requests.get(orders_endpoint,
+      headers={'Authorization': user_token, 'Content-Type': 'application/json'}
+      )
+  orders = json.loads(response.text)
+  assert len(orders['orders']) == 1
+  assert orders['orders'][0]['orderId'] == global_config['orderId']
+  assert orders['orders'][0]['totalAmount'] == 19.97
+  assert orders['orders'][0]['restaurantId'] == 1
+  assert len(orders['orders'][0]['orderItems']) == 2  
