@@ -35,11 +35,11 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        -   AttributeName: id
-            AttributeType: S
+        - AttributeName: id
+          AttributeType: S
       KeySchema:
-        -   AttributeName: id
-            KeyType: HASH
+        - AttributeName: id
+          KeyType: HASH
       TimeToLiveSpecification:
         AttributeName: expiration
         Enabled: true
@@ -85,7 +85,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref OrdersTable
-          IDEMPOTENCY_TABLE_NAME: !Ref IdempotencyTable       
+          IDEMPOTENCY_TABLE_NAME: !Ref IdempotencyTable
       Events:
         ApiEvent:
           Type: Api
