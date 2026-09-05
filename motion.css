@@ -1,0 +1,181 @@
+/* ============================================================
+   KINETIC — Motion
+   The system's centre of gravity. Read the rules before the code.
+
+   1. Nothing moves linearly. Real objects accelerate and settle.
+   2. Anything the user summons OVERSHOOTS and settles.
+      Anything that leaves just goes, fast.
+   3. Press feedback is under 150ms or it feels broken.
+   4. Reward is disproportionate to effort. A tapped answer earns
+      a 600ms celebration. That imbalance is the whole product.
+   5. Groups stagger. Never let six things arrive at once.
+   6. Motion is transform + opacity only. Animating width,
+      height, top or left drops frames on mid-range Android,
+      which is most of the world.
+   ============================================================ */
+
+:root {
+  /* ---------------- DURATION ----------------
+     If you reach for a value outside this set, you are wrong
+     about the interaction, not about the number. */
+  --t-tap:       90ms;   /* press-down, toggle flip           */
+  --t-fast:     150ms;   /* hover, tint change, icon swap     */
+  --t-base:     240ms;   /* enter, exit, expand, slide        */
+  --t-slow:     360ms;   /* sheets, page transitions, reveals */
+  --t-reward:   620ms;   /* correct answer, level up, unlock  */
+  --t-parade:  1100ms;   /* confetti, streak fire, full-screen */
+
+  /* ---------------- EASING ----------------
+     --ease-pop is the signature. It overshoots ~6% and settles.
+     Use it for every element that ENTERS on user command.  */
+  --ease-pop:     cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-pop-big: cubic-bezier(0.22, 1.72, 0.36, 1);   /* rewards only */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);      /* exits, dismissals */
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);      /* things that move A→B */
+  --ease-snap:    cubic-bezier(0.4, 0, 0.2, 1);        /* progress fills */
+
+  /* ---------------- STAGGER ---------------- */
+  --stagger-step: 55ms;
+  --stagger-max:  6;     /* beyond 6, batch the rest — don't crawl */
+}
+
+/* ============================================================
+   PRESS — the physical contract
+   Attach .k-press to ANY tappable surface. It borrows its
+   depth from --depth-color, which the component sets.
+   ============================================================ */
+.k-press {
+  --depth-color: var(--brand-shade);
+  --travel: var(--press-md);
+  box-shadow: var(--depth-md) var(--depth-color);
+  transform: translateY(0);
+  transition:
+    transform   var(--t-tap) var(--ease-snap),
+    box-shadow  var(--t-tap) var(--ease-snap),
+    filter      var(--t-fast) linear;
+  will-change: transform;
+}
+.k-press:hover:not(:disabled) { filter: brightness(1.06); }
+.k-press:active:not(:disabled),
+.k-press[data-pressed='true'] {
+  transform: translateY(var(--travel));
+  box-shadow: 0 0 0 var(--depth-color);
+}
+.k-press:disabled { opacity: 0.45; box-shadow: none; transform: none; cursor: not-allowed; }
+
+.k-press--sm { --travel: var(--press-sm); box-shadow: var(--depth-sm) var(--depth-color); }
+.k-press--lg { --travel: var(--press-lg); box-shadow: var(--depth-lg) var(--depth-color); }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
+/* Enter: the workhorse. Everything the user opens uses this. */
+@keyframes k-pop-in {
+  from { opacity: 0; transform: scale(0.86) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+
+@keyframes k-pop-out {
+  from { opacity: 1; transform: scale(1);    }
+  to   { opacity: 0; transform: scale(0.94); }
+}
+
+/* Reward: bigger overshoot, held a beat longer. */
+@keyframes k-cheer {
+  0%   { transform: scale(0.7)  rotate(-4deg); opacity: 0; }
+  55%  { transform: scale(1.12) rotate(2deg);  opacity: 1; }
+  75%  { transform: scale(0.97) rotate(0deg);  }
+  100% { transform: scale(1)    rotate(0deg);  }
+}
+
+/* Failure: a headshake, not an earthquake. Small amplitude,
+   fast decay. The user made a mistake, they aren't in danger. */
+@keyframes k-nope {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-7px); }
+  35% { transform: translateX(6px);  }
+  55% { transform: translateX(-4px); }
+  75% { transform: translateX(2px);  }
+}
+
+/* Attention without anxiety — use on ONE element, never many. */
+@keyframes k-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.045); }
+}
+
+/* Streak flame / energy */
+@keyframes k-flicker {
+  0%, 100% { transform: scale(1)    rotate(0deg);   }
+  25%      { transform: scale(1.08) rotate(-3deg);  }
+  50%      { transform: scale(0.96) rotate(2deg);   }
+  75%      { transform: scale(1.05) rotate(-1deg);  }
+}
+
+/* Slide up from the bottom edge — sheets, toasts, keyboards */
+@keyframes k-rise {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0);    }
+}
+
+/* Checkmark stroke draw — pair with stroke-dasharray on the path */
+@keyframes k-draw { to { stroke-dashoffset: 0; } }
+
+/* Progress bar sheen: signals "this is live", not decoration */
+@keyframes k-sheen {
+  from { transform: translateX(-120%); }
+  to   { transform: translateX(320%);  }
+}
+
+/* Confetti particle. Each piece gets randomised custom props. */
+@keyframes k-confetti {
+  0%   { opacity: 1; transform: translate3d(0,0,0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--dr)); }
+}
+
+/* Number ticking up — apply to a wrapper while JS counts */
+@keyframes k-tick {
+  0%   { transform: translateY(0)     scale(1);    }
+  40%  { transform: translateY(-4px)  scale(1.14); }
+  100% { transform: translateY(0)     scale(1);    }
+}
+
+/* ============================================================
+   ANIMATION UTILITIES
+   ============================================================ */
+.k-in      { animation: k-pop-in  var(--t-base)   var(--ease-pop)     both; }
+.k-out     { animation: k-pop-out var(--t-fast)   var(--ease-out)     both; }
+.k-cheer   { animation: k-cheer   var(--t-reward) var(--ease-pop-big) both; }
+.k-nope    { animation: k-nope    420ms           var(--ease-in-out)  both; }
+.k-breathe { animation: k-breathe 2.4s            ease-in-out infinite; }
+.k-flicker { animation: k-flicker 1.6s            ease-in-out infinite; }
+.k-rise    { animation: k-rise    var(--t-slow)   var(--ease-pop)     both; }
+.k-tick    { animation: k-tick    var(--t-base)   var(--ease-pop-big) both; }
+
+/* Stagger: set style="--i:0", "--i:1"… on each child.
+   Cap at --stagger-max, then let the rest land together. */
+.k-stagger > * {
+  animation: k-pop-in var(--t-base) var(--ease-pop) both;
+  animation-delay: calc(min(var(--i, 0), var(--stagger-max)) * var(--stagger-step));
+}
+
+/* ============================================================
+   REDUCED MOTION
+   Keep the FEEDBACK, remove the TRAVEL. A user with vestibular
+   sensitivity still needs to know their tap registered — so
+   colour, opacity and depth changes survive; transforms,
+   confetti and looping animations don't.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 60ms !important;
+  }
+  .k-in, .k-cheer, .k-rise, .k-tick { animation: none; opacity: 1; transform: none; }
+  .k-nope, .k-breathe, .k-flicker   { animation: none; }
+  .k-confetti-layer                 { display: none; }
+  /* press still collapses — that's information, not decoration */
+  .k-press:active:not(:disabled) { transform: translateY(var(--travel)); }
+}

@@ -1,0 +1,215 @@
+/* ============================================================
+   KINETIC — Design Tokens
+   Motion-first, tactile design system for consumer apps.
+   Every token here exists to make the interface feel physical.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  /* ----------------------------------------------------------
+     COLOR
+     Every interactive color is a TRIPLE:
+       --x        surface / fill
+       --x-shade  the darker edge underneath it (physical depth)
+       --x-tint   soft background wash for states & containers
+     Never use a fill without its shade. The shade IS the depth.
+     ---------------------------------------------------------- */
+
+  /* Each colour is a QUAD. Using a fill without its partners is a bug.
+       --x        vivid fill (surfaces, bars, badges, illustration)
+       --x-shade  the darker edge underneath (depth only, no text on it)
+       --x-tint   soft wash for state backgrounds
+       --x-deep   accessible text colour — >=4.5:1 on --x-tint AND on white
+       --x-on     text colour that sits ON --x — audited, not assumed
+     Only violet carries white. Everything else carries ink, which is
+     the look: dark type on candy colour. */
+
+  /* Brand / primary action */
+  --violet:        #7C4DFF;
+  --violet-shade:  #5A2ED4;
+  --violet-tint:   #EFE8FF;
+  --violet-deep:   #4C25B8;   /* 7.80 on tint */
+  --violet-on:     #FFFFFF;   /* 4.81 on fill */
+
+  /* Success / correct */
+  --green:         #2DC653;
+  --green-shade:   #1E9E3E;
+  --green-tint:    #E0F8E7;
+  --green-deep:    #0F6E32;   /* 5.69 on tint */
+  --green-on:      #16161D;   /* 7.98 on fill */
+
+  /* Error / incorrect — coral, never fire-engine red */
+  --coral:         #FF4D5E;
+  --coral-shade:   #D62F40;
+  --coral-tint:    #FFE6E9;
+  --coral-deep:    #A81E2D;   /* 6.14 on tint */
+  --coral-on:      #16161D;   /* 5.55 on fill */
+
+  /* Streak / energy / reward */
+  --amber:         #FF9F1C;
+  --amber-shade:   #DB7C00;
+  --amber-tint:    #FFF1DB;
+  --amber-deep:    #7A4200;   /* 7.23 on tint */
+  --amber-on:      #16161D;   /* 8.77 on fill */
+
+  /* Info / secondary action */
+  --sky:           #22B8F5;
+  --sky-shade:     #0D91CC;
+  --sky-tint:      #E0F5FE;
+  --sky-deep:      #07607F;   /* 6.24 on tint */
+  --sky-on:        #16161D;   /* 7.92 on fill */
+
+  /* Semantic aliases — components reference these, not raw hues.
+     Rebrand = change these five lines. */
+  --brand:         var(--violet);
+  --brand-shade:   var(--violet-shade);
+  --brand-tint:    var(--violet-tint);
+  --brand-deep:    var(--violet-deep);
+  --brand-on:      var(--violet-on);
+  --text:          var(--ink);
+  --text-soft:     var(--ink-3);
+
+  /* ----------------------------------------------------------
+     TYPE
+     Fredoka carries personality (headings, numbers, buttons).
+     Nunito carries information (body, labels, long text).
+     Both are round-terminaled and heavy — that roundness is
+     doing the same job as the border-radius.
+     ---------------------------------------------------------- */
+  --font-display: 'Fredoka', system-ui, sans-serif;
+  --font-ui:      'Nunito', system-ui, sans-serif;
+
+  --type-hero:    700 2.75rem/1.05 var(--font-display);  /* 44px */
+  --type-h1:      700 2rem/1.15   var(--font-display);   /* 32px */
+  --type-h2:      600 1.5rem/1.25 var(--font-display);   /* 24px */
+  --type-h3:      600 1.25rem/1.3 var(--font-display);   /* 20px */
+  --type-lead:    600 1.125rem/1.55 var(--font-ui);      /* 18px */
+  --type-body:    600 1rem/1.55    var(--font-ui);       /* 16px */
+  --type-small:   700 0.875rem/1.45 var(--font-ui);      /* 14px */
+  --type-button:  600 1.0625rem/1  var(--font-display);  /* 17px */
+  --type-stat:    700 1.75rem/1    var(--font-display);  /* 28px, tabular */
+
+  --track-tight:  -0.02em;
+  --track-normal: 0;
+
+  /* ----------------------------------------------------------
+     SPACE — 4px base. Chunky products need chunky gaps.
+     ---------------------------------------------------------- */
+  --s-1:  0.25rem;   /*  4 */
+  --s-2:  0.5rem;    /*  8 */
+  --s-3:  0.75rem;   /* 12 */
+  --s-4:  1rem;      /* 16 */
+  --s-5:  1.25rem;   /* 20 */
+  --s-6:  1.5rem;    /* 24 */
+  --s-8:  2rem;      /* 32 */
+  --s-10: 2.5rem;    /* 40 */
+  --s-14: 3.5rem;    /* 56 */
+  --s-18: 4.5rem;    /* 72 */
+
+  /* ----------------------------------------------------------
+     RADIUS — generous everywhere. Nothing in this system has
+     a sharp corner except progress-bar interiors.
+     ---------------------------------------------------------- */
+  --r-sm:   0.5rem;   /*  8 — chips, inline tags */
+  --r-md:   0.875rem; /* 14 — inputs, small buttons */
+  --r-lg:   1rem;     /* 16 — buttons */
+  --r-xl:   1.25rem;  /* 20 — cards */
+  --r-2xl:  1.75rem;  /* 28 — sheets, modals */
+  --r-pill: 999px;
+
+  /* ----------------------------------------------------------
+     DEPTH — hard offset shadows, zero blur.
+     This is the single most important visual decision in the
+     system. Blur = a floating rectangle. Hard offset = an
+     object with a side, sitting on a surface, waiting to be
+     pressed. Never replace these with soft shadows.
+     ---------------------------------------------------------- */
+  --depth-sm: 0 2px 0;
+  --depth-md: 0 4px 0;
+  --depth-lg: 0 6px 0;
+
+  /* travel distance on press — must equal the depth offset */
+  --press-sm: 2px;
+  --press-md: 4px;
+  --press-lg: 6px;
+
+  /* the one soft shadow allowed: things genuinely floating
+     above the plane (modals, toasts, dragged items) */
+  --lift: 0 12px 32px -8px rgb(22 22 29 / 0.28);
+
+  /* ----------------------------------------------------------
+     BORDERS — visible, always. Outlines are structure, not trim.
+     ---------------------------------------------------------- */
+  --stroke:        2px;
+  --stroke-strong: 3px;
+
+  /* ----------------------------------------------------------
+     TOUCH — nothing tappable is smaller than this, ever.
+     ---------------------------------------------------------- */
+  --tap-min: 48px;
+  --tap-cta: 56px;
+
+  /* ----------------------------------------------------------
+     FOCUS — on-brand and unmissable. Keyboard users get the
+     same quality of feedback as thumb users.
+     ---------------------------------------------------------- */
+  --focus-ring: 0 0 0 3px var(--surface), 0 0 0 6px var(--brand);
+}
+
+/* ============================================================
+   DARK — not an inversion. Surfaces get lighter as they get
+   closer to you; shades stay darker than their fill so depth
+   still reads.
+   ============================================================ */
+[data-theme='dark'] {
+  --violet: #9370FF; --violet-shade: #6541C7; --violet-tint: #2A2140; --violet-deep: #C0AAFF; --violet-on: #16161D;
+  --green:  #3DD96A; --green-shade:  #1F9A42; --green-tint:  #16301D; --green-deep:  #7EE89B; --green-on:  #16161D;
+  --coral:  #FF6B7A; --coral-shade:  #C93745; --coral-tint:  #3A1B20; --coral-deep:  #FF9AA6; --coral-on:  #16161D;
+  --amber:  #FFB347; --amber-shade:  #C97A08; --amber-tint:  #382613; --amber-deep:  #FFC978; --amber-on:  #16161D;
+  --sky:    #4FC8FF; --sky-shade:    #1487BC; --sky-tint:    #12293A; --sky-deep:    #8FDCFF; --sky-on:    #16161D;
+
+  --ink:          #F4F4F8;
+  --ink-2:        #C6C6D2;
+  --ink-3:        #8E8EA0;
+  --line:         #2E2E3B;
+  --line-strong:  #434354;
+  --surface:      #17171F;
+  --surface-2:    #1F1F29;
+  --surface-sunk: #0F0F15;
+
+  --lift: 0 12px 32px -8px rgb(0 0 0 / 0.6);
+  --focus-ring: 0 0 0 3px var(--surface), 0 0 0 6px var(--brand);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text);
+  background: var(--surface-2);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { margin: 0; letter-spacing: var(--track-tight); }
+h1 { font: var(--type-h1); }
+h2 { font: var(--type-h2); }
+h3 { font: var(--type-h3); }
+
+p { margin: 0; max-width: 62ch; }
+
+/* Numbers that change must not reflow. Non-negotiable for
+   scores, timers, streaks, currency. */
+.k-num { font-variant-numeric: tabular-nums; font-family: var(--font-display); }
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

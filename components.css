@@ -1,0 +1,236 @@
+/* ============================================================
+   KINETIC — Components
+   Requires tokens.css and motion.css.
+   ============================================================ */
+
+/* ---------------- BUTTON ----------------
+   Uppercase-free, full-weight, physically depressed on tap.
+   Primary is the loudest thing on any screen and there is
+   exactly one per view.
+   ---------------------------------------------------------- */
+.k-btn {
+  --fill: var(--brand);
+  --depth-color: var(--brand-shade);
+  --label: var(--brand-on);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: var(--tap-cta);
+  padding: 0 var(--s-6);
+  border: none;
+  border-radius: var(--r-lg);
+  background: var(--fill);
+  color: var(--label);
+  font: var(--type-button);
+  letter-spacing: var(--track-tight);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.k-btn--block     { display: flex; width: 100%; }
+.k-btn--success   { --fill: var(--green); --depth-color: var(--green-shade); --label: var(--green-on); }
+.k-btn--danger    { --fill: var(--coral); --depth-color: var(--coral-shade); --label: var(--coral-on); }
+.k-btn--info      { --fill: var(--sky);   --depth-color: var(--sky-shade);   --label: var(--sky-on);   }
+
+/* Secondary: hollow, but still has a floor to press against. */
+.k-btn--ghost {
+  --fill: var(--surface);
+  --depth-color: var(--line-strong);
+  --label: var(--text-soft);
+  border: var(--stroke) solid var(--line);
+}
+
+/* Tertiary: no depth. Reserve for "skip", "not now", "cancel". */
+.k-btn--quiet {
+  background: transparent;
+  color: var(--text-soft);
+  box-shadow: none;
+  transform: none;
+  min-height: var(--tap-min);
+}
+.k-btn--quiet:hover { background: var(--surface-sunk); }
+
+/* ---------------- CARD / OPTION TILE ----------------
+   The selectable answer tile. Three states, each with its own
+   depth colour so the change reads even without the fill.
+   ---------------------------------------------------------- */
+.k-tile {
+  --depth-color: var(--line-strong);
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  width: 100%;
+  min-height: var(--tap-cta);
+  padding: var(--s-4) var(--s-5);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--type-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform  var(--t-tap)  var(--ease-snap),
+    box-shadow var(--t-tap)  var(--ease-snap),
+    background var(--t-fast) linear,
+    border-color var(--t-fast) linear;
+}
+.k-tile[data-state='selected'] {
+  border-color: var(--sky);
+  background: var(--sky-tint);
+  color: var(--sky-deep);
+  --depth-color: var(--sky);
+}
+.k-tile[data-state='correct'] {
+  border-color: var(--green);
+  background: var(--green-tint);
+  color: var(--green-deep);
+  --depth-color: var(--green);
+}
+.k-tile[data-state='wrong'] {
+  border-color: var(--coral);
+  background: var(--coral-tint);
+  color: var(--coral-deep);
+  --depth-color: var(--coral);
+}
+
+/* Keyboard hint chip inside a tile — teaches shortcuts passively */
+.k-kbd {
+  margin-left: auto;
+  min-width: 28px;
+  padding: 2px 6px;
+  border: var(--stroke) solid currentColor;
+  border-radius: var(--r-sm);
+  opacity: 0.45;
+  font: var(--type-small);
+  text-align: center;
+}
+
+/* ---------------- SURFACE CARD ---------------- */
+.k-card {
+  padding: var(--s-6);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+}
+
+/* ---------------- PROGRESS ----------------
+   Always visible. Never hidden behind a menu. The fill is a
+   transform, not a width, so it stays on the compositor.
+   ---------------------------------------------------------- */
+.k-progress {
+  position: relative;
+  height: 16px;
+  border-radius: var(--r-pill);
+  background: var(--surface-sunk);
+  overflow: hidden;
+}
+.k-progress__fill {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--green);
+  transform-origin: left center;
+  transform: scaleX(var(--value, 0));
+  transition: transform var(--t-slow) var(--ease-snap);
+}
+/* Inner highlight — sells the fill as a solid object with a top face */
+.k-progress__fill::after {
+  content: '';
+  position: absolute;
+  inset: 4px 8px auto 8px;
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.42);
+}
+.k-progress--live .k-progress__fill > .k-sheen {
+  position: absolute; inset: 0; width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .5), transparent);
+  animation: k-sheen 1.8s var(--ease-in-out) infinite;
+}
+
+/* ---------------- STREAK / STAT ---------------- */
+.k-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+  font: var(--type-stat);
+  font-variant-numeric: tabular-nums;
+}
+.k-stat svg { width: 22px; height: 22px; }
+
+/* ---------------- FEEDBACK BAR ----------------
+   Rises from the bottom edge after an answer. Colour carries
+   the verdict; copy carries the next step. Never blocks the
+   screen, never needs a dismiss tap.
+   ---------------------------------------------------------- */
+.k-feedback {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-5) var(--s-6);
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+  animation: k-rise var(--t-base) var(--ease-pop) both;
+}
+.k-feedback--correct { background: var(--green-tint); color: var(--green-deep); }
+.k-feedback--wrong   { background: var(--coral-tint); color: var(--coral-deep); }
+.k-feedback__title   { font: var(--type-h3); }
+.k-feedback__note    { font: var(--type-small); opacity: .85; }
+.k-feedback .k-btn   { margin-left: auto; }
+
+/* ---------------- INPUT ----------------
+   Recessed instead of raised — inputs are holes you put things
+   into, buttons are objects you press. Depth direction encodes
+   affordance.
+   ---------------------------------------------------------- */
+.k-input {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--s-3) var(--s-4);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font: var(--type-body);
+  box-shadow: inset 0 2px 0 var(--line);
+  transition: border-color var(--t-fast) linear, background var(--t-fast) linear;
+}
+.k-input::placeholder { color: var(--ink-3); }
+.k-input:focus { border-color: var(--brand); background: var(--surface); }
+
+/* ---------------- CONFETTI LAYER ----------------
+   Particles are absolutely positioned children with
+   --dx/--dy/--dr set inline by JS. Layer is pointer-events:none
+   and self-removes after --t-parade.
+   ---------------------------------------------------------- */
+.k-confetti-layer { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.k-confetti-layer i {
+  position: absolute;
+  width: 10px; height: 14px;
+  border-radius: 2px;
+  animation: k-confetti var(--t-parade) var(--ease-out) both;
+}
+
+/* ---------------- EMPTY STATE ----------------
+   An invitation, not a dead end. Illustration + one sentence +
+   one button. Never a grey line of text alone.
+   ---------------------------------------------------------- */
+.k-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-4);
+  padding: var(--s-14) var(--s-6);
+  text-align: center;
+}
+.k-empty__art { width: 128px; height: 128px; }
+.k-empty p { color: var(--text-soft); }

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kinetic — live reference</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* demo shell only — not part of the system */
+  body { display:grid; place-items:start center; min-height:100dvh; padding:var(--s-6) var(--s-4) var(--s-18); }
+  .shell { width:min(480px,100%); display:grid; gap:var(--s-6); }
+  .topbar { display:flex; align-items:center; gap:var(--s-3); }
+  .topbar .k-progress { flex:1; }
+  .lede { display:grid; gap:var(--s-2); }
+  .lede .eyebrow { font:var(--type-small); color:var(--text-soft); }
+  .options { display:grid; gap:var(--s-3); list-style:none; margin:0; padding:0; }
+  .swatches { display:grid; grid-template-columns:repeat(5,1fr); gap:var(--s-2); }
+  .sw { height:64px; border-radius:var(--r-lg); display:grid; align-content:end; padding:var(--s-2);
+        color:#fff; font:var(--type-small); }
+  .row { display:flex; gap:var(--s-3); flex-wrap:wrap; }
+  .divider { height:var(--stroke); background:var(--line); border-radius:var(--r-pill); }
+  .theme-btn { position:fixed; top:var(--s-4); right:var(--s-4); z-index:50; }
+  footer { font:var(--type-small); color:var(--text-soft); text-align:center; }
+</style>
+</head>
+<body>
+
+<button class="k-btn k-btn--ghost k-press k-press--sm theme-btn" id="theme" style="min-height:44px;padding:0 var(--s-4)">Dark</button>
+
+<main class="shell">
+
+  <!-- 1. Progress is permanently on screen -->
+  <div class="topbar">
+    <button class="k-btn k-btn--quiet" style="padding:0 var(--s-2)" aria-label="Close">✕</button>
+    <div class="k-progress k-progress--live">
+      <div class="k-progress__fill" id="bar" style="--value:.4"><span class="k-sheen"></span></div>
+    </div>
+    <span class="k-stat"><span class="k-flicker">🔥</span><span id="streak" class="k-num">12</span></span>
+  </div>
+
+  <!-- 2. One question, one loud button -->
+  <section class="k-card k-in" id="card">
+    <div class="lede" style="margin-bottom:var(--s-5)">
+      <span class="eyebrow">Question 4 of 10</span>
+      <h1>Which curve makes a button feel physical?</h1>
+    </div>
+
+    <ul class="options k-stagger" id="options">
+      <li style="--i:0"><button class="k-tile k-press k-press--sm" data-correct="false">
+        <span>linear</span><kbd class="k-kbd">1</kbd></button></li>
+      <li style="--i:1"><button class="k-tile k-press k-press--sm" data-correct="true">
+        <span>cubic-bezier(0.34, 1.56, 0.64, 1)</span><kbd class="k-kbd">2</kbd></button></li>
+      <li style="--i:2"><button class="k-tile k-press k-press--sm" data-correct="false">
+        <span>ease-in-out</span><kbd class="k-kbd">3</kbd></button></li>
+      <li style="--i:3"><button class="k-tile k-press k-press--sm" data-correct="false">
+        <span>steps(4, end)</span><kbd class="k-kbd">4</kbd></button></li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 3. The parts, on their own -->
+  <section class="k-card" style="display:grid;gap:var(--s-5)">
+    <h2>Buttons</h2>
+    <div class="row">
+      <button class="k-btn k-press">Primary</button>
+      <button class="k-btn k-btn--success k-press">Success</button>
+      <button class="k-btn k-btn--danger k-press">Danger</button>
+    </div>
+    <div class="row">
+      <button class="k-btn k-btn--ghost k-press">Ghost</button>
+      <button class="k-btn k-btn--quiet">Skip for now</button>
+      <button class="k-btn k-press" disabled>Disabled</button>
+    </div>
+
+    <h2>Input</h2>
+    <input class="k-input" placeholder="Recessed, not raised">
+
+    <h2>Colour triples</h2>
+    <div class="swatches">
+      <div class="sw" style="background:var(--brand);box-shadow:var(--depth-md) var(--brand-shade)">brand</div>
+      <div class="sw" style="background:var(--green);box-shadow:var(--depth-md) var(--green-shade)">green</div>
+      <div class="sw" style="background:var(--coral);box-shadow:var(--depth-md) var(--coral-shade)">coral</div>
+      <div class="sw" style="background:var(--amber);box-shadow:var(--depth-md) var(--amber-shade)">amber</div>
+      <div class="sw" style="background:var(--sky);box-shadow:var(--depth-md) var(--sky-shade)">sky</div>
+    </div>
+
+    <h2>Empty state</h2>
+    <div class="k-empty" style="padding:var(--s-8) 0">
+      <svg class="k-empty__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+        <rect x="22" y="38" width="84" height="62" rx="16" fill="var(--brand-tint)" stroke="var(--brand)" stroke-width="4"/>
+        <circle cx="50" cy="64" r="6" fill="var(--brand)"/>
+        <circle cx="78" cy="64" r="6" fill="var(--brand)"/>
+        <path d="M50 82c8 7 20 7 28 0" stroke="var(--brand)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M64 38V22M52 26l12-8 12 8" stroke="var(--amber)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3>Nothing here yet</h3>
+      <p>Your first lesson takes about three minutes.</p>
+      <button class="k-btn k-press">Start lesson</button>
+    </div>
+  </section>
+
+  <footer>Tap an answer above. Try it wrong first — the failure state is the point.</footer>
+</main>
+
+<!-- feedback bar gets injected here -->
+<div id="feedback-slot" style="position:fixed;left:0;right:0;bottom:0;z-index:60"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+
+/* ---- theme ---- */
+$('#theme').onclick = e => {
+  const dark = document.documentElement.dataset.theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+  e.currentTarget.textContent = dark ? 'Dark' : 'Light';
+};
+
+/* ---- haptics ---- */
+const PATTERNS = { press:[10], correct:[15,30,25], wrong:[20,40,20] };
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const haptic = k => navigator.vibrate?.(PATTERNS[k]);
+
+/* ---- confetti ---- */
+const COLORS = ['var(--brand)','var(--green)','var(--amber)','var(--sky)','var(--coral)'];
+function confetti(n = 44) {
+  if (reduced()) return;
+  const layer = document.createElement('div');
+  layer.className = 'k-confetti-layer';
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('i');
+    const a = Math.random() * Math.PI * 2, d = 140 + Math.random() * 320;
+    p.style.left = 45 + Math.random() * 10 + '%';
+    p.style.top  = 55 + Math.random() * 10 + '%';
+    p.style.background = COLORS[i % COLORS.length];
+    p.style.setProperty('--dx', Math.cos(a) * d + 'px');
+    p.style.setProperty('--dy', Math.sin(a) * d + 260 + 'px');
+    p.style.setProperty('--dr', (Math.random() * 720 - 360) + 'deg');
+    p.style.animationDelay = Math.random() * 120 + 'ms';
+    layer.appendChild(p);
+  }
+  document.body.appendChild(layer);
+  setTimeout(() => layer.remove(), 1500);
+}
+
+/* ---- count up ---- */
+function countUp(el, from, to, ms = 600) {
+  if (reduced()) { el.textContent = to; return; }
+  const t0 = performance.now();
+  const step = t => {
+    const p = Math.min(1, (t - t0) / ms);
+    el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  el.classList.remove('k-tick'); void el.offsetWidth; el.classList.add('k-tick');
+}
+
+/* ---- answer flow ---- */
+let answered = false;
+const tiles = [...document.querySelectorAll('.k-tile')];
+
+tiles.forEach((tile, i) => {
+  tile.addEventListener('pointerdown', () => haptic('press'));
+  tile.addEventListener('click', () => answer(tile));
+  tile.dataset.index = i;
+});
+
+addEventListener('keydown', e => {
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= tiles.length) tiles[n - 1].click();
+});
+
+function answer(tile) {
+  if (answered) return;
+  answered = true;
+  const correct = tile.dataset.correct === 'true';
+
+  tile.dataset.state = correct ? 'correct' : 'wrong';
+  if (!correct) {
+    tile.classList.add('k-nope');
+    tiles.find(t => t.dataset.correct === 'true').dataset.state = 'correct';
+  }
+  tiles.forEach(t => t.disabled = true);
+
+  haptic(correct ? 'correct' : 'wrong');
+  if (correct) {
+    confetti();
+    $('#bar').style.setProperty('--value', .5);
+    countUp($('#streak'), 12, 13);
+  }
+  showFeedback(correct);
+}
+
+function showFeedback(correct) {
+  const check = `<path d="M4 12.5 9.5 18 20 6" stroke-dasharray="30" stroke-dashoffset="30"
+      style="animation:k-draw 380ms 120ms cubic-bezier(.22,1,.36,1) forwards"/>`;
+  const cross = `<path d="M6 6 18 18"/><path d="M18 6 6 18"/>`;
+
+  $('#feedback-slot').innerHTML = `
+    <div class="k-feedback k-feedback--${correct ? 'correct' : 'wrong'}" role="status" aria-live="polite">
+      <svg class="${correct ? 'k-cheer' : 'k-nope'}" width="40" height="40" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        ${correct ? check : cross}
+      </svg>
+      <div>
+        <div class="k-feedback__title">${correct ? 'Nice' : 'Not quite'}</div>
+        ${correct ? '' : '<div class="k-feedback__note">The overshoot curve is what gives it weight.</div>'}
+      </div>
+      <button class="k-btn k-press ${correct ? 'k-btn--success' : 'k-btn--danger'}" id="cont">Continue</button>
+    </div>`;
+
+  $('#cont').onclick = reset;
+}
+
+function reset() {
+  answered = false;
+  $('#feedback-slot').innerHTML = '';
+  tiles.forEach(t => { t.disabled = false; delete t.dataset.state; t.classList.remove('k-nope'); });
+  $('#bar').style.setProperty('--value', .4);
+  const card = $('#card');
+  card.classList.remove('k-in'); void card.offsetWidth; card.classList.add('k-in');
+  document.querySelector('#options').classList.remove('k-stagger');
+  void document.querySelector('#options').offsetWidth;
+  document.querySelector('#options').classList.add('k-stagger');
+}
+</script>
+</body>
+</html>
